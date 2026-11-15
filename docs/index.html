@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISKCON AI — Redirecting…</title>
+    <meta name="description" content="ISKCON AI — Chat with Prabhupada books">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            background: #030712;
+            color: #f8fafc;
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            text-align: center;
+            padding: 1.5rem;
+        }
+        .card {
+            max-width: 28rem;
+            border: 1px solid rgba(245, 158, 11, 0.45);
+            border-radius: 1rem;
+            padding: 2rem;
+            background: rgba(15, 23, 42, 0.9);
+        }
+        a { color: #fbbf24; }
+        .err { color: #fca5a5; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <p id="msg">Opening ISKCON AI…</p>
+        <p id="link" hidden><a id="manual" href="#">Continue manually</a></p>
+    </div>
+    <script>
+        const msg = document.getElementById('msg');
+        const linkBox = document.getElementById('link');
+        const manual = document.getElementById('manual');
+
+        fetch('tunnel-url.json?_=' + Date.now())
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (!data || !data.url) throw new Error('missing url');
+                manual.href = data.url;
+                linkBox.hidden = false;
+                window.location.replace(data.url);
+            })
+            .catch(function () {
+                msg.innerHTML = '<span class="err">The app tunnel is offline or updating.</span> Ask the host to run <code>./scripts/start-public.sh</code> on their machine, then refresh this page.';
+            });
+    </script>
+</body>
+</html>
