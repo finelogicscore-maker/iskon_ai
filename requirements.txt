@@ -1,0 +1,14 @@
+# Linux-friendly pins (avoid macOS-only torch wheels from pip freeze)
+fastapi==0.143.0
+uvicorn[standard]==0.54.0
+python-dotenv==1.2.4
+pydantic==2.14.1
+langchain==1.4.4
+langchain-core==1.6.10
+langchain-google-genai==4.4.1
+langchain-huggingface==1.2.3
+langchain-pinecone==0.2.13
+pinecone==7.3.0
+sentence-transformers==6.1.0
+google-genai==2.29.0
+huggingface-hub>=0.23.0

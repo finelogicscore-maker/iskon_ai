@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISKCON AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: #030712;
+            background-image: 
+                linear-gradient(to bottom, rgba(3, 7, 18, 0.75), rgba(3, 7, 18, 0.90)),
+                url('/static/back1.jpg');
+            background-size: cover;
+            background-position: center top;
+            background-attachment: fixed;
+        }
+        
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(9, 13, 22, 0.8); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d97706; border-radius: 3px; }
+
+        /* ISKCON AI Hybrid Neon Glows */
+        .gold-neon-border {
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4), inset 0 0 15px rgba(245, 158, 11, 0.1);
+        }
+        .gold-neon-border:hover {
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.6), inset 0 0 20px rgba(245, 158, 11, 0.2);
+        }
+        .gold-glow-text {
+            text-shadow: 0 0 15px rgba(251, 191, 36, 0.8);
+        }
+
+        .nav-tab {
+            transition: all 0.2s ease;
+        }
+        .nav-tab.active {
+            background: rgba(245, 158, 11, 0.25);
+            border-color: rgba(245, 158, 11, 0.7);
+            color: #fcd34d;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
+        }
+
+        .mission-highlight {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(16, 185, 129, 0.12));
+            border: 1px solid rgba(245, 158, 11, 0.65);
+            box-shadow: 0 0 24px rgba(245, 158, 11, 0.25);
+        }
+        .donation-highlight {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(245, 158, 11, 0.18));
+            border: 2px solid rgba(52, 211, 153, 0.6);
+            box-shadow: 0 0 28px rgba(16, 185, 129, 0.2);
+        }
+    </style>
+</head>
+<body class="h-full text-slate-100 flex flex-col justify-between overflow-hidden">
+
+    <!-- TOP HUD HEADER -->
+    <header class="bg-slate-950/85 backdrop-blur-md border-b border-amber-500/40 py-3 px-6 shadow-[0_4px_25px_rgba(0,0,0,0.8)] flex flex-wrap items-center justify-between gap-2 z-20">
+        <div class="flex items-center gap-4 cursor-pointer" onclick="goBackToLibrary()">
+            <!-- Prominent Official ISKCON Logo Avatar -->
+            <div class="relative w-14 h-14 rounded-2xl bg-white/95 border-2 border-amber-400 p-1.5 flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.7)] overflow-hidden">
+                <img src="/static/iskcon_logo.jpg" alt="ISKCON Logo" class="w-full h-full object-contain">
+                <span class="absolute -top-1 -right-1 w-3 h-3 bg-amber-400 rounded-full animate-ping"></span>
+                <span class="absolute -top-1 -right-1 w-3 h-3 bg-amber-400 rounded-full"></span>
+            </div>
+            <div>
+                <h1 class="font-orbitron text-base sm:text-lg font-bold text-amber-400 tracking-wider gold-glow-text flex items-center gap-2">
+                    ISKCON AI <span class="text-[10px] font-rajdhani font-semibold bg-cyan-500/30 text-cyan-200 border border-cyan-400/50 px-2 py-0.5 rounded tracking-widest">RAG-AI v3.5</span>
+                </h1>
+                <p class="text-[11px] font-rajdhani tracking-widest text-amber-200 uppercase font-semibold">Gaudiya Vaishnavism Intelligence Node</p>
+            </div>
+        </div>
+
+        <nav class="hidden sm:flex items-center gap-1.5 flex-wrap justify-end" aria-label="Site sections">
+            <button type="button" data-tab="mission" class="nav-tab text-[10px] sm:text-[11px] font-rajdhani font-bold uppercase tracking-wider px-3 py-2 rounded-lg border border-amber-500/40 text-amber-200/90 hover:bg-amber-950/60 hover:border-amber-500/60 backdrop-blur-sm">
+                Mission
+            </button>
+            <button type="button" data-tab="donation" class="nav-tab text-[10px] sm:text-[11px] font-rajdhani font-bold uppercase tracking-wider px-3 py-2 rounded-lg border border-amber-500/40 text-amber-200/90 hover:bg-amber-950/60 hover:border-amber-500/60 backdrop-blur-sm">
+                Donation
+            </button>
+            <button type="button" data-tab="contact" class="nav-tab text-[10px] sm:text-[11px] font-rajdhani font-bold uppercase tracking-wider px-3 py-2 rounded-lg border border-amber-500/40 text-amber-200/90 hover:bg-amber-950/60 hover:border-amber-500/60 backdrop-blur-sm">
+                Contact Us
+            </button>
+        </nav>
+
+        <nav class="flex sm:hidden items-center gap-1 w-full order-last basis-full justify-center mt-2 pt-2 border-t border-amber-500/20" aria-label="Site sections mobile">
+            <button type="button" data-tab="mission" class="nav-tab flex-1 text-[10px] font-rajdhani font-bold uppercase tracking-wider px-2 py-1.5 rounded-lg border border-amber-500/40 text-amber-200/90">Mission</button>
+            <button type="button" data-tab="donation" class="nav-tab flex-1 text-[10px] font-rajdhani font-bold uppercase tracking-wider px-2 py-1.5 rounded-lg border border-amber-500/40 text-amber-200/90">Donate</button>
+            <button type="button" data-tab="contact" class="nav-tab flex-1 text-[10px] font-rajdhani font-bold uppercase tracking-wider px-2 py-1.5 rounded-lg border border-amber-500/40 text-amber-200/90">Contact</button>
+        </nav>
+
+        <div id="activeBookBadge" class="hidden items-center gap-2 bg-slate-950/85 border border-amber-500/50 px-3.5 py-1.5 rounded-lg text-xs font-rajdhani font-semibold text-amber-300 tracking-wider backdrop-blur-sm shadow-md shrink-0">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            <span>ACTIVE SCRIPTURE:</span> <span id="badgeBookTitle" class="font-bold text-slate-100 uppercase"></span>
+        </div>
+    </header>
+
+    <!-- MAIN VIEWPORT CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col overflow-hidden relative z-10">
+        
+        <!-- VIEW 1: NEURAL MATRIX CARD GRID -->
+        <div id="libraryView" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 py-2">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+                <div class="inline-flex items-center gap-2 text-[11px] font-rajdhani font-bold tracking-widest text-amber-300 uppercase bg-slate-950/85 px-3.5 py-1 rounded-full border border-amber-500/50 backdrop-blur-md shadow-md">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Select ISKCON Index
+                </div>
+                <h2 class="font-serif text-2xl sm:text-4xl font-bold text-amber-100 tracking-wide gold-glow-text">Chat with Prabhupada Books</h2>
+                <p class="text-xs sm:text-sm font-rajdhani text-amber-100 font-medium tracking-wide drop-shadow">Inquire from authentic AI vector embeddings generated directly from the teachings of Srila Prabhupada.</p>
+            </div>
+
+            <!-- Book Matrix Grid -->
+            <div id="bookGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6 mt-2">
+                <!-- Dynamically populated via JS -->
+            </div>
+
+            <!-- MORE BOOKS COMING SOON BANNER -->
+            <div class="mt-4 mb-6 bg-slate-950/70 border border-amber-500/30 rounded-2xl p-6 text-center backdrop-blur-md shadow-lg gold-neon-border">
+                <div class="inline-flex items-center gap-2 text-xs font-rajdhani font-bold tracking-widest text-amber-300 uppercase mb-1">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> EXPANSION IN PROGRESS
+                </div>
+                <h3 class="font-orbitron text-base font-bold text-slate-200 tracking-wider uppercase">More Sacred Volumes Coming Soon</h3>
+                <p class="text-xs font-rajdhani text-slate-400 mt-1">Additional Gaudiya Vaishnava literatures and letters are currently undergoing neural embedding encoding.</p>
+            </div>
+        </div>
+
+        <!-- VIEW 2: HUD CHAT INTERFACE -->
+        <div id="chatView" class="hidden flex-1 flex flex-col overflow-hidden gap-3">
+            <!-- HUD Control Bar -->
+            <div class="flex items-center justify-between border-b border-amber-500/30 pb-2">
+                <button onclick="goBackToLibrary()" class="flex items-center gap-2 text-xs font-rajdhani font-bold uppercase tracking-wider bg-slate-950/85 hover:bg-amber-950/80 border border-amber-500/50 px-3.5 py-2 rounded-lg text-amber-300 transition duration-200 shadow-md backdrop-blur-md">
+                    ← Return to Library Grid
+                </button>
+                <div class="text-[11px] font-rajdhani font-semibold text-cyan-200 flex items-center gap-2 bg-slate-950/85 border border-cyan-400/40 px-3 py-1 rounded-full backdrop-blur-md shadow-md">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span> MAHA-MANTRA VECTOR STREAM ACTIVE
+                </div>
+            </div>
+
+            <!-- Terminal Chat Display -->
+            <div id="chatContainer" class="flex-1 bg-slate-950/80 backdrop-blur-md border border-amber-500/40 rounded-2xl p-4 sm:p-6 overflow-y-auto custom-scrollbar flex flex-col gap-4 shadow-[0_0_35px_rgba(0,0,0,0.8)] gold-neon-border">
+                <!-- Welcome prompt injected here -->
+            </div>
+
+            <!-- AI Neural Processing Indicator -->
+            <div id="typingIndicator" class="hidden items-center gap-3 text-xs font-rajdhani font-bold text-amber-300 tracking-widest uppercase px-2 py-1 drop-shadow">
+                <div class="flex items-center gap-1">
+                    <span class="w-1.5 h-4 bg-amber-400 animate-pulse"></span>
+                    <span class="w-1.5 h-4 bg-amber-400 animate-pulse" style="animation-delay: 150ms"></span>
+                    <span class="w-1.5 h-4 bg-amber-400 animate-pulse" style="animation-delay: 300ms"></span>
+                </div>
+                <span>Consulting Srila Prabhupada's Vani Vectors...</span>
+            </div>
+
+            <!-- HUD Command Input Form -->
+            <form id="chatForm" class="flex gap-3 mt-1">
+                <div class="relative flex-1">
+                    <input 
+                        type="text" 
+                        id="queryInput" 
+                        placeholder="Ask a question about the scripture..." 
+                        class="w-full bg-slate-950/85 backdrop-blur-md border border-amber-500/50 rounded-xl px-4 py-3.5 text-sm text-slate-100 placeholder-slate-300 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 font-sans shadow-lg tracking-wide"
+                        autocomplete="off"
+                        required
+                    >
+                    <div class="absolute right-3 top-3.5 text-[10px] font-rajdhani font-bold text-amber-300 uppercase pointer-events-none">SUBMIT INQUIRY</div>
+                </div>
+                <button 
+                    type="submit" 
+                    id="sendButton"
+                    class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-orbitron font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition duration-200 flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.5)] active:scale-95"
+                >
+                    Transmit
+                </button>
+            </form>
+        </div>
+
+        <!-- VIEW 3: MISSION -->
+        <div id="missionView" class="hidden flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 py-4">
+            <div class="bg-slate-950/85 backdrop-blur-md border border-amber-500/50 rounded-2xl p-6 sm:p-8 shadow-2xl gold-neon-border max-w-3xl mx-auto w-full">
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-amber-100 gold-glow-text mb-4">Our Mission</h2>
+                <p class="inline-flex items-center gap-2 text-[10px] font-rajdhani font-bold tracking-widest text-cyan-200 uppercase bg-cyan-500/20 border border-cyan-400/50 px-3 py-1 rounded-full mb-4">Registered non-profit organisation</p>
+                <div class="space-y-4 text-sm text-slate-200 leading-relaxed font-sans">
+                    <p>ISKCON AI is a <strong class="text-amber-200 font-semibold">non-profit organisation</strong> devoted to sharing the vani of His Divine Grace A.&nbsp;C. Bhaktivedanta Swami Prabhupada—making authentic scripture study accessible through devotionally grounded AI, so seekers can hear, learn, and apply Krishna consciousness in daily life.</p>
+                    <p>We build technology in the service of sankirtana: distributing books, supporting temples, caring for cows, and nourishing devotees and guests with prasādam. Every feature of this platform is meant to uplift consciousness, not replace the guidance of guru, sādhu, and śāstra.</p>
+                    <ul class="list-disc pl-5 space-y-2 font-rajdhani text-amber-100/90">
+                        <li>RAG-based answers rooted in Prabhupada&apos;s books and ISKCON publications</li>
+                        <li>Free spiritual inquiry for anyone drawn to Gaudiya Vaishnavism</li>
+                        <li>Revenue directed back into seva—not personal gain</li>
+                    </ul>
+                </div>
+
+                <div class="mission-highlight rounded-2xl p-5 sm:p-6 mt-6">
+                    <p class="text-[10px] font-rajdhani font-bold uppercase tracking-[0.2em] text-amber-300 mb-2">Mission commitment</p>
+                    <p class="font-orbitron text-lg sm:text-xl font-bold text-amber-100 gold-glow-text leading-snug">
+                        <span class="text-3xl sm:text-4xl text-amber-400">70%</span> of profit is dedicated to ISKCON, gowshala (cow protection), and feeding people at ISKCON.
+                    </p>
+                    <p class="text-xs font-rajdhani text-emerald-200/90 mt-3 leading-relaxed">Your use of ISKCON AI and any associated support directly fuels temple programs, go-seva, and anna-dāna for devotees and visitors.</p>
+                </div>
+
+                <p class="text-xs font-rajdhani text-amber-300/80 uppercase tracking-widest pt-4">Hare Krishna — intelligence in the service of devotion</p>
+                <button type="button" onclick="goBackToLibrary()" class="mt-6 text-xs font-rajdhani font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300">← Back to Scripture Library</button>
+            </div>
+        </div>
+
+        <!-- VIEW 4: DONATION -->
+        <div id="donationView" class="hidden flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 py-4">
+            <div class="bg-slate-950/85 backdrop-blur-md border border-amber-500/50 rounded-2xl p-6 sm:p-8 shadow-2xl gold-neon-border max-w-3xl mx-auto w-full text-center">
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-amber-100 gold-glow-text mb-5">Donate</h2>
+
+                <div class="donation-highlight rounded-2xl p-6 sm:p-8 text-center">
+                    <p class="font-orbitron text-base sm:text-lg font-bold text-emerald-100 leading-relaxed gold-glow-text">
+                        All money received goes to ISKCON, gowshala (cow protection), and feeding people at ISKCON.
+                    </p>
+                </div>
+
+                <p class="text-sm text-slate-300 leading-relaxed font-sans mt-6 max-w-lg mx-auto">Thank you for supporting devotional service. For donation details, please reach us through the Contact Us tab.</p>
+
+                <button type="button" onclick="goBackToLibrary()" class="mt-8 text-xs font-rajdhani font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300">← Back to Scripture Library</button>
+            </div>
+        </div>
+
+        <!-- VIEW 5: CONTACT US -->
+        <div id="contactView" class="hidden flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-6 py-4">
+            <div class="bg-slate-950/85 backdrop-blur-md border border-amber-500/50 rounded-2xl p-6 sm:p-8 shadow-2xl gold-neon-border max-w-3xl mx-auto w-full">
+                <h2 class="font-serif text-2xl sm:text-3xl font-bold text-amber-100 gold-glow-text mb-4">Contact Us</h2>
+                <p class="text-sm text-slate-200 leading-relaxed font-sans mb-6">We welcome your questions, feedback, and suggestions regarding ISKCON AI and this scripture chat experience.</p>
+                <dl class="space-y-4 font-rajdhani text-sm">
+                    <div class="border border-amber-500/30 rounded-xl p-4 bg-slate-900/50">
+                        <dt class="text-[10px] font-bold uppercase tracking-widest text-amber-400 mb-1">Phone</dt>
+                        <dd><a href="tel:+9305590863" class="text-cyan-300 hover:text-cyan-200 font-orbitron text-base tracking-wide">+9305590863</a></dd>
+                    </div>
+                    <div class="border border-amber-500/30 rounded-xl p-4 bg-slate-900/50">
+                        <dt class="text-[10px] font-bold uppercase tracking-widest text-amber-400 mb-1">Email</dt>
+                        <dd><a href="mailto:info@iskcon.org" class="text-cyan-300 hover:text-cyan-200">info@iskcon.org</a></dd>
+                    </div>
+                    <div class="border border-amber-500/30 rounded-xl p-4 bg-slate-900/50">
+                        <dt class="text-[10px] font-bold uppercase tracking-widest text-amber-400 mb-1">International Society for Krishna Consciousness</dt>
+                        <dd class="text-slate-300">Visit <a href="https://iskcon.org" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:text-cyan-200">iskcon.org</a> for temples and regional contacts.</dd>
+                    </div>
+                </dl>
+                <button type="button" onclick="goBackToLibrary()" class="mt-6 text-xs font-rajdhani font-bold uppercase tracking-wider text-amber-400 hover:text-amber-300">← Back to Scripture Library</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Sci-Fi Modal Alert -->
+    <div id="errorModal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-900/95 border border-amber-500/60 rounded-2xl p-6 max-w-md w-full shadow-[0_0_40px_rgba(245,158,11,0.4)] flex flex-col gap-4 text-center backdrop-blur-md">
+            <div class="w-16 h-16 rounded-2xl bg-white/95 border-2 border-amber-400 p-1.5 flex items-center justify-center mx-auto shadow-lg">
+                <img src="/static/iskcon_logo.jpg" alt="ISKCON Logo" class="w-full h-full object-contain">
+            </div>
+            <h3 id="modalTitle" class="text-lg font-orbitron font-bold text-slate-100 tracking-wide uppercase">System Notice</h3>
+            <p id="errorMessage" class="text-xs font-rajdhani font-medium text-slate-200 leading-relaxed"></p>
+            <button onclick="closeErrorModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-orbitron font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition shadow-md">Acknowledge</button>
+        </div>
+    </div>
+
+    <script>
+        const books = [
+            {
+                id: "chaitanya",
+                title: "Śrī Caitanya-caritāmṛta",
+                author: "Krishnadasa Kaviraja / Srila Prabhupada",
+                description: "The sublime biography and deep philosophical nectar of Sri Chaitanya Mahaprabhu.",
+                image: "/static/chaintanya.jpg",
+                status: "available",
+                indexCode: "INDEX::CC-01"
+            },
+            {
+                id: "bhagwad-gita",
+                title: "Bhagavad-gītā As It Is",
+                author: "Srila Prabhupada",
+                description: "The eternal song of God, imparting profound wisdom on duty, karma, soul, and pure bhakti-yoga.",
+                image: "/static/bhagwad_gita.webp",
+                status: "available",
+                indexCode: "INDEX::BG-02"
+            },
+            {
+                id: "bhagwatam",
+                title: "Śrīmad-Bhāgavatam",
+                author: "Srila Prabhupada",
+                description: "The ripened fruit of Vedic literature detailing the pastimes and incarnations of the Supreme Lord.",
+                image: "/static/bhagwatam.jpeg",
+                status: "available",
+                indexCode: "INDEX::SB-03"
+            },
+            {
+                id: "prabhupad",
+                title: "Srila Prabhupada Biography",
+                author: "Satsvarupa dasa Goswami",
+                description: "The inspiring life and teachings of Srila Prabhupada, Founder-Acharya of ISKCON.",
+                image: "/static/prabhupad.jpeg",
+                status: "available",
+                indexCode: "INDEX::SP-04"
+            }
+        ];
+
+        let currentActiveBook = null;
+
+        const libraryView = document.getElementById('libraryView');
+        const chatView = document.getElementById('chatView');
+        const missionView = document.getElementById('missionView');
+        const donationView = document.getElementById('donationView');
+        const contactView = document.getElementById('contactView');
+        const infoViews = { mission: missionView, donation: donationView, contact: contactView };
+        let activeInfoTab = null;
+        const bookGrid = document.getElementById('bookGrid');
+        const chatContainer = document.getElementById('chatContainer');
+        const chatForm = document.getElementById('chatForm');
+        const queryInput = document.getElementById('queryInput');
+        const activeBookBadge = document.getElementById('activeBookBadge');
+        const badgeBookTitle = document.getElementById('badgeBookTitle');
+        const errorModal = document.getElementById('errorModal');
+        const errorMessage = document.getElementById('errorMessage');
+        const modalTitle = document.getElementById('modalTitle');
+
+        function renderLibrary() {
+            bookGrid.innerHTML = '';
+            books.forEach(book => {
+                const isAvailable = book.status === 'available';
+                const card = document.createElement('div');
+                card.className = `bg-slate-950/85 backdrop-blur-md border border-amber-500/50 rounded-2xl overflow-hidden flex flex-col justify-between shadow-2xl gold-neon-border transition-all duration-300 group`;
+                
+                card.innerHTML = `
+                    <div>
+                        <!-- Futuristic Image HUD Frame -->
+                        <div class="relative w-full h-60 overflow-hidden bg-slate-950 flex items-center justify-center border-b border-amber-500/30">
+                            <img 
+                                src="${book.image}" 
+                                alt="${book.title}" 
+                                class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500 filter brightness-95 group-hover:brightness-100"
+                                onerror="this.onerror=null; this.src='https://via.placeholder.com/300x400?text=Vector+Index';"
+                            />
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/10 to-transparent"></div>
+                            
+                            <!-- Index Badge -->
+                            <div class="absolute top-3 left-3 bg-slate-950/90 border border-amber-500/50 text-[10px] font-rajdhani font-bold text-amber-400 px-2.5 py-1 rounded-md backdrop-blur-md">
+                                ${book.indexCode}
+                            </div>
+
+                            <!-- Status Badge -->
+                            <span class="absolute top-3 right-3 text-[10px] font-rajdhani font-bold uppercase tracking-wider px-2.5 py-1 rounded-md ${isAvailable ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/60' : 'bg-slate-800 text-slate-400 border border-slate-700'}">
+                                ${isAvailable ? '● ONLINE' : '○ OFFLINE'}
+                            </span>
+                        </div>
+
+                        <!-- Card Metadata -->
+                        <div class="p-5 space-y-2">
+                            <h3 class="font-serif text-lg font-bold text-amber-200 group-hover:text-amber-400 transition tracking-wide">${book.title}</h3>
+                            <p class="text-xs font-rajdhani font-semibold text-cyan-300 tracking-wider">AUTHOR: ${book.author}</p>
+                            <p class="text-xs text-slate-100 leading-relaxed line-clamp-3 font-sans">${book.description}</p>
+                        </div>
+                    </div>
+
+                    <!-- HUD Action Button -->
+                    <div class="p-5 pt-0">
+                        <button 
+                            onclick="handleCardClick('${book.id}')"
+                            class="w-full py-3 px-4 rounded-xl font-orbitron font-bold text-xs tracking-wider uppercase transition-all duration-200 flex items-center justify-center gap-2 ${
+                                isAvailable 
+                                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.4)] active:scale-95 cursor-pointer' 
+                                    : 'bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed'
+                            }"
+                        >
+                            <span>⚡ CHAT WITH AI</span>
+                        </button>
+                    </div>
+                `;
+
+                bookGrid.appendChild(card);
+            });
+        }
+
+        function handleCardClick(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if (book && book.status === 'available') {
+                openChat(book);
+            } else {
+                showModal("Index Unavailable", "The selected knowledge vector index is undergoing neural encoding.");
+            }
+        }
+
+        function openChat(book) {
+            currentActiveBook = book;
+            activeInfoTab = null;
+            Object.values(infoViews).forEach(v => v.classList.add('hidden'));
+            setNavTabActive(null);
+            libraryView.classList.add('hidden');
+            chatView.classList.remove('hidden');
+            activeBookBadge.classList.remove('hidden');
+            activeBookBadge.classList.add('flex');
+            badgeBookTitle.textContent = book.title;
+
+            chatContainer.innerHTML = `
+                <div class="flex items-start gap-3.5">
+                    <!-- Larger Prominent ISKCON Logo Avatar for AI Bot -->
+                    <div class="w-12 h-12 rounded-2xl overflow-hidden flex-shrink-0 border-2 border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.6)] bg-white/95 p-1 flex items-center justify-center">
+                        <img src="/static/iskcon_logo.jpg" alt="ISKCON Logo" class="w-full h-full object-contain">
+                    </div>
+                    <div class="bg-slate-950/85 border border-amber-500/40 rounded-2xl p-4 max-w-[85%] text-xs sm:text-sm leading-relaxed text-slate-100 shadow-md font-sans backdrop-blur-md">
+                        <div class="text-[10px] font-rajdhani font-bold text-amber-400 mb-1 uppercase tracking-widest">HARE KRISHNA · NEURAL AI CONNECTED</div>
+                        I am calibrated on the authentic vector embeddings of <strong>${book.title}</strong>. Submit any question to initiate RAG retrieval and synthesis.
+                    </div>
+                </div>
+            `;
+            queryInput.focus();
+        }
+
+        function setNavTabActive(tab) {
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                const isActive = tab && btn.getAttribute('data-tab') === tab;
+                btn.classList.toggle('active', isActive);
+            });
+        }
+
+        function hideAllMainViews() {
+            libraryView.classList.add('hidden');
+            chatView.classList.add('hidden');
+            Object.values(infoViews).forEach(v => v.classList.add('hidden'));
+        }
+
+        function showInfoTab(tab) {
+            const view = infoViews[tab];
+            if (!view) return;
+            hideAllMainViews();
+            activeInfoTab = tab;
+            view.classList.remove('hidden');
+            setNavTabActive(tab);
+            activeBookBadge.classList.remove('flex');
+            activeBookBadge.classList.add('hidden');
+            currentActiveBook = null;
+        }
+
+        function goBackToLibrary() {
+            currentActiveBook = null;
+            activeInfoTab = null;
+            hideAllMainViews();
+            chatView.classList.add('hidden');
+            activeBookBadge.classList.remove('flex');
+            activeBookBadge.classList.add('hidden');
+            libraryView.classList.remove('hidden');
+            setNavTabActive(null);
+        }
+
+        document.querySelectorAll('.nav-tab').forEach(btn => {
+            btn.addEventListener('click', () => showInfoTab(btn.getAttribute('data-tab')));
+        });
+
+        function showModal(title, msg) {
+            modalTitle.textContent = title;
+            errorMessage.textContent = msg;
+            errorModal.classList.remove('hidden');
+            errorModal.classList.add('flex');
+        }
+
+        function closeErrorModal() {
+            errorModal.classList.remove('flex');
+            errorModal.classList.add('hidden');
+        }
+
+        function appendMessage(sender, text) {
+            const isUser = sender === 'user';
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex items-start gap-3.5 ${isUser ? 'flex-row-reverse' : ''}`;
+            
+            messageDiv.innerHTML = `
+                <div class="${isUser ? 'w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-400/60 text-cyan-200 font-orbitron font-bold text-xs flex items-center justify-center shadow-[0_0_10px_rgba(6,182,212,0.4)]' : 'w-12 h-12 rounded-2xl bg-white/95 border-2 border-amber-400 p-1 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.6)]'} flex-shrink-0">
+                    ${isUser ? 'USR' : '<img src="/static/iskcon_logo.jpg" alt="ISKCON" class="w-full h-full object-contain">'}
+                </div>
+                <div class="${isUser ? 'bg-cyan-500 text-slate-950 font-semibold' : 'bg-slate-950/85 text-slate-100 border border-amber-500/40 backdrop-blur-md'} rounded-2xl px-4 py-3 max-w-[85%] text-xs sm:text-sm leading-relaxed shadow-md whitespace-pre-wrap font-sans">
+                    ${escapeHtml(text)}
+                </div>
+            `;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const query = queryInput.value.trim();
+            if (!query || !currentActiveBook) return;
+
+            queryInput.value = '';
+            appendMessage('user', query);
+            
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.classList.remove('hidden');
+            typingIndicator.classList.add('flex');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            try {
+                const response = await fetch(`/${currentActiveBook.id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Failed to fetch response from server.');
+                }
+
+                appendMessage('bot', data.answer);
+            } catch (err) {
+                showModal("Neural Link Error", err.message);
+                appendMessage('bot', 'System Alert: Vector retrieval failed. Check connection to database endpoint.');
+            } finally {
+                typingIndicator.classList.remove('flex');
+                typingIndicator.classList.add('hidden');
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        });
+
+        renderLibrary();
+    </script>
+</body>
+</html>

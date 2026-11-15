@@ -1,0 +1,17 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: iskcon-ai
+    runtime: python
+    plan: starter
+    region: singapore
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PINECONE_API_KEY
+        sync: false
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: HF_HOME
+        value: /opt/render/project/src/.cache/huggingface
